@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kervzxc Music Player</title>
+    <link rel="stylesheet" href="ikawto.css">
+    <script src="https://kit.fontawesome.com/188fd1d95d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="music-player">
+        <img src="media/melon.png" class="song-img">
+        <h2 style="color:white" id="songTitle">Popop</h2>
+        <p style="color:white" id="songArtist"><q>Dj Boss Kervzxc</q></p>
+       <!--MGA LINK SA KANTA-->
+        <audio id="song">
+            <source src="media/Nonstop.mp3.mp3" type="audio/mpeg">
+            <source src="media/pansamantala.mp3.mp3" type="audio/mpeg">
+            <source src="media/the reason.mp3.mp3" type="audio/mpeg">
+            <source src="media/naalaa ka.mp3.mp3" type="audio/mpeg">
+            <source src="media/perfect.mp3.mp3" type="audio/mpeg">
+        </audio>
+        <input type="range" value="0" id="progress">
+
+        <div class="controls">
+            <div onclick="prevSong()"><i class="fa-solid fa-backward"></i></div>
+            <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+            <div onclick="nextSong()"><i class="fa-solid fa-forward"></i></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let progress = document.getElementById("progress");
+    let song = document.getElementById("song");
+    let ctrlIcon = document.getElementById("ctrlIcon");
+    let songTitle = document.getElementById("songTitle");
+    let songArtist = document.getElementById("songArtist");
+    let currentSongIndex = 0;
+    let songs = [
+        { title: "Popop", artist: "Dj Boss Kervzxc", src: "media/Nonstop.mp3.mp3" },
+        { title: "Pansamantala", artist: "Callily", src: "media/pansamantala.mp3.mp3" },
+        { title: "The reason", artist: "Hoobastank", src: "media/the reason.mp3.mp3" },
+        { title: "Naalala ka", artist: "Rey Valera", src: "media/naalaa ka.mp3.mp3" },
+        { title: "Perfect", artist: "Simple Plan", src: "media/perfect.mp3.mp3" },
+    ];
+
+    song.onloadedmetadata = function(){
+        progress.max = song.duration;
+        progress.value = song.currentTime;
+    }
+
+    function playPause(){
+        if(ctrlIcon.classList.contains("fa-pause")){
+            song.pause();
+            ctrlIcon.classList.remove("fa-pause");
+            ctrlIcon.classList.add("fa-play");
+        } else {
+            song.play();
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+    }
+
+    function prevSong(){
+        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        changeSong();
+    }
+
+    function nextSong(){
+        currentSongIndex = (currentSongIndex + 1) % songs.length;
+        changeSong();
+    }
+
+    function changeSong(){
+        let songInfo = songs[currentSongIndex];
+        song.src = songInfo.src;
+        songTitle.textContent = songInfo.title;
+        songArtist.textContent = songInfo.artist;
+        song.play();
+        ctrlIcon.classList.remove("fa-pause");
+        ctrlIcon.classList.add("fa-play");
+    }
+
+    setInterval(()=>{
+        if(!song.paused){
+            progress.value = song.currentTime;
+        }
+    },500);
+
+    progress.onchange = function(){
+        song.play();
+        song.currentTime = progress.value;
+        ctrlIcon.classList.add("fa-pause");
+        ctrlIcon.classList.remove("fa-play");
+    }
+</script>
+
+</body>
+</html>
